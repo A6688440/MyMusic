@@ -3,6 +3,9 @@ package com.example.mymusic.view;
 import com.example.mymusic.base.view.BaseView;
 import com.example.mymusic.http.BaseModel;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 /**
  * Created by SJC on 2020/4/18.
  * Describe：
@@ -36,8 +39,13 @@ public interface IPlayContract {
     }
 
 
-    interface M {
-        void getSingerImg(String singer, String song, long duration);//获取歌手的图片
+    interface P {
+        void onRequest(String singer);
+
     }
 
+
+    interface M<Bean> {
+        void onResponse(Bean bean);//获取歌手的图片
+    }
 }

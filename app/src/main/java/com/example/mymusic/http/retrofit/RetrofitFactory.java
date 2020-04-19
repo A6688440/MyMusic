@@ -25,6 +25,13 @@ public class RetrofitFactory {
     private static Retrofit sSingPicRetrofit;
 
 
+
+
+
+
+
+
+
     //获取接口实例
 
     //创建网络请求Observable
@@ -41,7 +48,6 @@ public class RetrofitFactory {
     public static RetrofitService createRequestOfSongUrl() {
         return getRetrofitOfSongUrl().create(RetrofitService.class);
     }
-
 
 
     //配置OkHttp
@@ -68,7 +74,7 @@ public class RetrofitFactory {
             sRetrofit = new Retrofit.Builder()
                     .baseUrl("") //对用服务器的host
                     .client(getsOkHttpClient())
-                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setLenient().create()))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // 把Retrofit请求转化成RxJava的Observable
                     .build();
         }
