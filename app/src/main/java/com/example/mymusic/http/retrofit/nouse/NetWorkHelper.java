@@ -1,4 +1,4 @@
-package com.example.mymusic.http;
+package com.example.mymusic.http.retrofit.nouse;
 
 import com.example.mymusic.http.bean.SingerImgBean;
 

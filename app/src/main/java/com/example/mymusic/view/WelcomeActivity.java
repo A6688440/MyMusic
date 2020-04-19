@@ -1,21 +1,19 @@
-package com.example.mymusic;
+package com.example.mymusic.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import java.util.concurrent.ExecutorService;
+import com.example.mymusic.R;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.example.mymusic.R.layout.activity_welcome;
 
 public class WelcomeActivity extends AppCompatActivity {
 

@@ -1,7 +1,9 @@
-package com.example.mymusic;
+package com.example.mymusic.view;
 
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.example.mymusic.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
