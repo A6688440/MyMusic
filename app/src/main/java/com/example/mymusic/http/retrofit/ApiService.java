@@ -13,7 +13,7 @@ import retrofit2.http.POST;
  * Created by SJC on 2020/4/18.
  * Describe：Retrofit的接口
  */
-public interface RetrofitService {
+public interface ApiService {
 
 
     /**
@@ -21,10 +21,11 @@ public interface RetrofitService {
      * @param singer 歌手的名字
      * @return
      */
+
     @Headers(Api.HEADER_USER_AGENT)
-    @POST(Api.SING_PTC)
+    @POST(Api.SINGER_PIC)
     @FormUrlEncoded
-    Observable<SingerImgBean> getSingImg(@Field("s")String singer);
+    Observable<SingerImgBean> getSingerImg(@Field("s")String singer);
 
 
 }

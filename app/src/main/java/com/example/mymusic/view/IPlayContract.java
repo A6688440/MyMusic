@@ -1,10 +1,6 @@
 package com.example.mymusic.view;
 
-import com.example.mymusic.base.view.BaseView;
-import com.example.mymusic.http.BaseModel;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import com.example.mymusic.http.bean.Bean;
 
 /**
  * Created by SJC on 2020/4/18.
@@ -13,11 +9,23 @@ import io.reactivex.disposables.Disposable;
 public interface IPlayContract {
 
     interface V {
-        String getSingerName();//得到歌手的姓名
+
+        void getSingerImg(String SingerImgUrl);//将图片设置成背景
+
+        void setSingerName(String SingerName);
+
+        //      void setSingerImgUrl(String SingerImageUrl);
+
+
+
+
+
+
+
+        /*String getSingerName();//得到歌手的姓名
 
         void getSingerAndLrc();//按钮点击事件，获取封面和歌词
 
-        void setSingerImg(String ImgUrl);//将图片设置成背景
 
         void showLove(boolean love);//判断是否显示我喜欢的图标
 
@@ -35,17 +43,21 @@ public interface IPlayContract {
 
         void getSongIdSuccess(String songId);//成功获取到该音乐的id
 
-        void saveLrc(String lrc);//保存歌词
+        void saveLrc(String lrc);//保存歌词*/
     }
 
 
-    interface P {
-        void onRequest(String singer);
+    interface P<Bean> {
+        void onRequest(String SingerName);
+
+        void onNext(Bean  bean);
+
+        void onError(Throwable e);
 
     }
 
 
-    interface M<Bean> {
-        void onResponse(Bean bean);//获取歌手的图片
+    interface M {
+        void onRequest(String SingerName);//获取歌手的图片
     }
 }

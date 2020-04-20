@@ -3,14 +3,13 @@ package com.example.mymusic.http.retrofit;
 import android.util.Log;
 
 import com.example.mymusic.http.Api;
-import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -35,47 +34,49 @@ public class RetrofitFactory {
     //获取接口实例
 
     //创建网络请求Observable
-    public static RetrofitService createRequest() {
-        return getsRetrofit().create(RetrofitService.class);
+    public static ApiService createRequest() {
+        return getsRetrofit().create(ApiService.class);
     }
 
     //创建获取歌手照片的网络请求
-    public static RetrofitService createRequestOfSinger() {
-        return getRetrofitOfSinger().create(RetrofitService.class);
+    public static ApiService createRequestOfSinger() {
+        return getRetrofitOfSinger().create(ApiService.class);
     }
 
     //创建获取歌曲Url的网络请求
-    public static RetrofitService createRequestOfSongUrl() {
-        return getRetrofitOfSongUrl().create(RetrofitService.class);
+    public static ApiService createRequestOfSongUrl() {
+        return getRetrofitOfSongUrl().create(ApiService.class);
     }
 
 
     //配置OkHttp
-    private synchronized static OkHttpClient getsOkHttpClient() {
+    private synchronized static OkHttpClient getOkHttpClient() {
         if (sOkHttpClient == null) {
-            //消息拦截器
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(
-                    message -> Log.i("RetrofitLog", "retrofit" + message)
-            );
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
+                //打印retrofit日志
+                Log.i("RetrofitLog","retrofitBack = "+message);
+            });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             sOkHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(100, TimeUnit.SECONDS)
-                    .readTimeout(100, TimeUnit.SECONDS)
-                    .writeTimeout(100, TimeUnit.SECONDS)
-                    //.addInterceptor(loggingInterceptor)
+                    .readTimeout(100,TimeUnit.SECONDS)
+                    .writeTimeout(100,TimeUnit.SECONDS)
+                    //.addInterceptor(loggingInterceptor)  日志
                     .build();
         }
-        return getsOkHttpClient();
+        return sOkHttpClient;
     }
+
+
 
     //配置Retrofit 单例模式
     private synchronized static Retrofit getsRetrofit() {
         if (sRetrofit == null) {
             sRetrofit = new Retrofit.Builder()
-                    .baseUrl("") //对用服务器的host
-                    .client(getsOkHttpClient())
+                    .baseUrl(Api.SINGER_PIC_BASE_URL) //对用服务器的host
+//                    .client(sOkHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // 把Retrofit请求转化成RxJava的Observable
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 把Retrofit请求转化成RxJava的Observable
                     .build();
         }
         return sRetrofit;
@@ -86,9 +87,9 @@ public class RetrofitFactory {
         if (sSingPicRetrofit == null) {
             sSingPicRetrofit = new Retrofit.Builder()
                     .baseUrl(Api.SINGER_PIC_BASE_URL)
-                    .client(getsOkHttpClient())
+                    .client(sOkHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
         }
         return sSingPicRetrofit;
@@ -99,9 +100,9 @@ public class RetrofitFactory {
         if (songUrlRetrofit == null) {
             songUrlRetrofit = new Retrofit.Builder()
                     .baseUrl(" ")// 对应服务端的ho
-                    .client(getsOkHttpClient())
+                    .client(sOkHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())// 这里还结合了Gson
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // 把Retrofit请求转化成RxJava的Observable
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 把Retrofit请求转化成RxJava的Observable
                     .build();
         }
         return songUrlRetrofit;
