@@ -1,7 +1,6 @@
-package com.example.mymusic.http.retrofit;
+package com.example.mymusic.mvp.retrofit;
 
-import com.example.mymusic.http.Api;
-import com.example.mymusic.http.bean.SingerImgBean;
+import com.example.mymusic.bean.SingerImgBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;

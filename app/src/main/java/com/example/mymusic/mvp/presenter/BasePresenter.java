@@ -1,19 +1,13 @@
-package com.example.mymusic.base;
+package com.example.mymusic.mvp.presenter;
 
-import com.example.mymusic.http.retrofit.ApiRetrofit;
-import com.example.mymusic.http.retrofit.ApiService;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import com.example.mymusic.mvp.model.BaseModel;
+import com.example.mymusic.mvp.view.BaseView;
 
 /**
  * Created by SJC on 2020/4/18.
  * Describe：
  */
-public abstract class BasePresenter<V extends BaseView,M extends BaseModel> {
+public abstract class BasePresenter<V extends BaseView,M extends BaseModel,CONTRACT>  {
 
     public M mModel;
 
@@ -25,6 +19,7 @@ public abstract class BasePresenter<V extends BaseView,M extends BaseModel> {
     //让子类去实现 具体的mModel
     public abstract M getmModelInstance();
 
+    public abstract  CONTRACT getContract();
 
     public BasePresenter() {
         this.mModel = getmModelInstance();

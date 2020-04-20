@@ -1,22 +1,21 @@
-package com.example.mymusic.view;
+package com.example.mymusic.play;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.bumptech.glide.Glide;
+import com.example.mymusic.MainFragment;
 import com.example.mymusic.R;
-import com.example.mymusic.base.BaseActivity;
-import com.example.mymusic.presenter.PlayPresenter;
+import com.example.mymusic.mvp.erroe.ExceptionHandle;
+import com.example.mymusic.mvp.view.BaseActivity;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends BaseActivity<PlayPresenter> implements IPlayContract.V {
+public class MainActivity extends BaseActivity<PlayPresenter,IPlayContract.V> {
 
 
     @BindView(R.id.play_seek_bar)
@@ -29,6 +28,8 @@ public class MainActivity extends BaseActivity<PlayPresenter> implements IPlayCo
     RippleView songNext;
     @BindView(R.id.circle_singer_image)
     CircleImageView circleSingerImage;
+
+
 
     @Override
     protected int getContentView() {
@@ -63,20 +64,31 @@ public class MainActivity extends BaseActivity<PlayPresenter> implements IPlayCo
                 .beginTransaction()
                 .add(R.id.fragment_container, new MainFragment())
                 .commit();
-        mPresenter.onRequest("刘瑞琦");
 
+        mPresenter.getContract().getSingerImgUrl("邓紫棋");
+
+    }
+
+    @Override
+    public IPlayContract.V getContract() {
+        return SingerImgUrl -> Glide.with(MainActivity.this).load(SingerImgUrl).into(circleSingerImage);
+    }
+
+
+    @Override
+    public void onSuccess(Object object) {
+       // String url = object.toString();
 
     }
 
 
     @Override
-    public void getSingerImg(String SingerImgUrl) {
+    public void onFail(ExceptionHandle.ResponseThrowable t) {
 
-        Glide.with(this).load(SingerImgUrl).into(circleSingerImage);
     }
 
     @Override
-    public void setSingerName(String SingerName) {
+    public void OnCompleted() {
 
     }
 }

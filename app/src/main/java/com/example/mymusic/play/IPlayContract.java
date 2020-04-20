@@ -1,6 +1,8 @@
-package com.example.mymusic.view;
+package com.example.mymusic.play;
 
-import com.example.mymusic.http.bean.Bean;
+import com.example.mymusic.bean.SingerImgBean;
+
+import io.reactivex.Observer;
 
 /**
  * Created by SJC on 2020/4/18.
@@ -8,11 +10,9 @@ import com.example.mymusic.http.bean.Bean;
  */
 public interface IPlayContract {
 
+    //view 需要的方法
     interface V {
-
-        void getSingerImg(String SingerImgUrl);//将图片设置成背景
-
-        void setSingerName(String SingerName);
+        void getSingerImgUrl(String SingerImgUrl);//将图片设置成背景
 
         //      void setSingerImgUrl(String SingerImageUrl);
 
@@ -47,17 +47,13 @@ public interface IPlayContract {
     }
 
 
-    interface P<Bean> {
-        void onRequest(String SingerName);
-
-        void onNext(Bean  bean);
-
-        void onError(Throwable e);
-
+    interface P{
+        void getSingerImgUrl(String singerName);
     }
 
 
+    //model需要的方法
     interface M {
-        void onRequest(String SingerName);//获取歌手的图片
+       void getSingerImgUrl(String singerName, Observer<SingerImgBean> observer);
     }
 }

@@ -1,8 +1,6 @@
-package com.example.mymusic.http.retrofit;
+package com.example.mymusic.mvp.retrofit;
 
 import android.util.Log;
-
-import com.example.mymusic.http.Api;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

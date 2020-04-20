@@ -1,22 +1,26 @@
-package com.example.mymusic.base;
+package com.example.mymusic.mvp.view;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.mymusic.mvp.disposable.SubscriptionManager;
+import com.example.mymusic.mvp.presenter.BasePresenter;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView {
+public abstract class BaseActivity<P extends BasePresenter,CONTRACT> extends AppCompatActivity implements BaseView {
 
     private Unbinder mBinder;
     public P mPresenter;
     private ProgressDialog dialog;
     public Context context;
     public Toast toast;
+
 
 
     //获取布局的ID
@@ -54,13 +58,23 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         onClick();
     }
 
+
+    public abstract CONTRACT getContract();
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+
         if (mPresenter != null) {
             mPresenter.unBindView();
         }
+
+
+        //View消除时取消订阅关系
+        SubscriptionManager.getInstance().cancelAll();
+
+
 
         //黄油刀解绑
         if (mBinder != null) {
@@ -68,32 +82,4 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             mBinder = null;
         }
     }
-
-
-
-    @Override
-    public void showNormalView() {
-
-    }
-
-    @Override
-    public void showErrorView() {
-
-    }
-
-    @Override
-    public void reload() {
-
-    }
-
-    @Override
-    public void showToast(String message) {
-
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
 }

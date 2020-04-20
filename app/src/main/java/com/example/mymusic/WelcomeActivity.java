@@ -1,10 +1,10 @@
-package com.example.mymusic.view;
+package com.example.mymusic;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.mymusic.R;
+import com.example.mymusic.play.MainActivity;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
