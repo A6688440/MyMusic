@@ -176,7 +176,7 @@
                             android:textColor="@drawable/selector_linear_click"/>
 
                         <TextView
-                            android:id="@+id/tv_love_num"
+                            android:id="@+id/tv_collection_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"

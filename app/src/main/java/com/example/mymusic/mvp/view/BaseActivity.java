@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.mymusic.mvp.disposable.SubscriptionManager;
+import com.example.mymusic.mvp.erroe.ExceptionHandle;
 import com.example.mymusic.mvp.presenter.BasePresenter;
 
 import androidx.annotation.Nullable;
@@ -32,9 +33,6 @@ public abstract class BaseActivity<P extends BasePresenter,CONTRACT> extends App
     //初始化数据
     protected abstract void initData();
 
-    //点击事件
-    protected abstract void onClick();
-
     //让子类实例化Presenter
     protected abstract P getmPresenterInstance();
 
@@ -55,7 +53,6 @@ public abstract class BaseActivity<P extends BasePresenter,CONTRACT> extends App
         context = this;
         initView();
         initData();
-        onClick();
     }
 
 
@@ -81,5 +78,20 @@ public abstract class BaseActivity<P extends BasePresenter,CONTRACT> extends App
             mBinder.unbind();
             mBinder = null;
         }
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
+    @Override
+    public void onFail(ExceptionHandle.ResponseThrowable t) {
+
+    }
+
+    @Override
+    public void OnCompleted() {
+
     }
 }

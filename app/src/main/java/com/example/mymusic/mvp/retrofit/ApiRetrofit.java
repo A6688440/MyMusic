@@ -22,9 +22,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiRetrofit {
     private static ApiRetrofit apiRetrofit;
-    private Retrofit retrofit;
     private OkHttpClient client;
+    private Retrofit retrofit;
+    private Retrofit retrofitSong;
+    private Retrofit retrofitSearch;
     private ApiService apiService;
+    private ApiService apiServiceSong;
+    private ApiService apiServiceSearch;
 
     private String TAG = "ApiRetrofit";
 
@@ -73,7 +77,27 @@ public class ApiRetrofit {
                 .client(client)
                 .build();
 
+        retrofitSearch = new Retrofit.Builder()
+                .baseUrl(Api.FIDDLER_BASE_QQ_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                //添加Rx支持
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        retrofitSong = new Retrofit.Builder()
+                .baseUrl(Api.FIDDLER_BASE_SONG_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                //添加Rx支持
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(client)
+                .build();
+
+
+
         apiService = retrofit.create(ApiService.class);
+        apiServiceSearch = retrofitSearch.create(ApiService.class);
+        apiServiceSong = retrofitSong.create(ApiService.class);
     }
 
     public static ApiRetrofit getInstance() {
@@ -88,7 +112,39 @@ public class ApiRetrofit {
         return apiRetrofit;
     }
 
+    public static ApiRetrofit getInstanceSong() {
+        if (apiRetrofit == null) {
+            synchronized (Object.class) {
+                if (apiRetrofit == null) {
+                    apiRetrofit = new ApiRetrofit();
+                }
+            }
+        }
+
+        return apiRetrofit;
+    }
+
+    public static ApiRetrofit getInstanceSearch() {
+        if (apiRetrofit == null) {
+            synchronized (Object.class) {
+                if (apiRetrofit == null) {
+                    apiRetrofit = new ApiRetrofit();
+                }
+            }
+        }
+
+        return apiRetrofit;
+    }
+
+
+
     public ApiService getApiService() {
         return apiService;
+    }
+    public ApiService getApiServiceSearch() {
+        return apiServiceSearch;
+    }
+    public ApiService getApiServiceSong() {
+        return apiServiceSong;
     }
 }

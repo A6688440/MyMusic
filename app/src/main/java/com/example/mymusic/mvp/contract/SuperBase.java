@@ -1,4 +1,4 @@
-package com.example.mymusic.mvp;
+package com.example.mymusic.mvp.contract;
 
 /**
  * Created by SJC on 2020/4/21.
