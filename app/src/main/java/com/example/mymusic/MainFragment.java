@@ -9,9 +9,14 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.mymusic.event.EventMessage;
+
 import org.greenrobot.eventbus.EventBus;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -65,6 +70,11 @@ public class MainFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
 
     @OnClick({R.id.tv_me, R.id.tv_listen, R.id.tv_look, R.id.tv_seek, R.id.tv_local_music_num, R.id.linear_local, R.id.tv_collection_num, R.id.linear_collection, R.id.tv_download_num, R.id.linear_download, R.id.tv_history_num, R.id.linear_history})
     public void onViewClicked(View view) {
@@ -76,8 +86,8 @@ public class MainFragment extends Fragment {
             case R.id.tv_look:
                 break;
             case R.id.tv_seek:
-                Log.e(TAG, "onViewClicked: "+"123456" );
-                EventBus.getDefault().postSticky(new EventMessage(true));
+                NavController controller= Navigation.findNavController(view);
+                controller.navigate(R.id.action_mainFragment_to_searchFragment);
                 break;
             case R.id.linear_local:
                 break;

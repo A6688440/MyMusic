@@ -1,4 +1,4 @@
-package com.example.mymusic;
+package com.example.mymusic.event;
 
 /**
  * Created by SJC on 2020/4/22.

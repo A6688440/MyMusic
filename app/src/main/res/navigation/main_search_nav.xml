@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_search_nav"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.mymusic.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_new_to_left"
+            app:exitAnim="@anim/slide_old_to_left"
+            app:popEnterAnim="@anim/slide_this_old_to_right"
+            app:popExitAnim="@anim/slide_this_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.mymusic.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_new_to_left"
+            app:exitAnim="@anim/slide_old_to_left"
+            app:popEnterAnim="@anim/slide_this_old_to_right"
+            app:popExitAnim="@anim/slide_this_to_right" />
+    </fragment>
+</navigation>

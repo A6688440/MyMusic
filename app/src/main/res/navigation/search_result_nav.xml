@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_result_nav"
+    app:startDestination="@id/searchHistoryFragment">
+
+    <fragment
+        android:id="@+id/searchHistoryFragment"
+        android:name="com.example.mymusic.search.SearchHistoryFragment"
+        android:label="SearchHistoryFragment" >
+        <action
+            android:id="@+id/action_searchHistoryFragment_to_searchResultFragment"
+            app:destination="@id/searchResultFragment"
+            app:enterAnim="@anim/slide_new_to_left"
+            app:exitAnim="@anim/slide_old_to_left"
+            app:popEnterAnim="@anim/slide_this_old_to_right"
+            app:popExitAnim="@anim/slide_this_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchResultFragment"
+        android:name="com.example.mymusic.search.SearchResultFragment"
+        android:label="fragment_search_result"
+        tools:layout="@layout/fragment_search_result" >
+        <action
+            android:id="@+id/action_searchResultFragment_to_searchHistoryFragment"
+            app:destination="@id/searchHistoryFragment"
+            app:enterAnim="@anim/slide_new_to_left"
+            app:exitAnim="@anim/slide_old_to_left"
+            app:popEnterAnim="@anim/slide_this_old_to_right"
+            app:popExitAnim="@anim/slide_this_to_right" />
+    </fragment>
+</navigation>

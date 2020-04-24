@@ -1,9 +1,11 @@
-package com.example.mymusic;
+package com.example.mymusic.search.result;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.mymusic.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

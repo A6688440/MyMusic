@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -30,15 +30,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/iv_back"
+            android:layout_marginEnd="20dp"
             android:layout_toStartOf="@+id/tv_search"
+            android:layout_toEndOf="@id/iv_back"
             android:background="@drawable/seek_sp"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingStart="15dp"
             android:hint="邓紫棋"
+            android:paddingStart="15dp"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -46,34 +46,30 @@
             android:id="@+id/tv_search"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            app:rv_centered="true"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="20dp">
+            android:layout_marginEnd="20dp"
+            app:rv_centered="true">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:text="搜索"
                 android:textColor="@color/white"
-                android:layout_centerInParent="true"
                 android:textSize="16sp" />
         </com.andexert.library.RippleView>
     </RelativeLayout>
 
-   <com.google.android.material.tabs.TabLayout
-       android:id="@+id/search_result_tab"
-       android:layout_width="match_parent"
-       android:layout_height="30dp"
-       app:tabGravity="fill"
-       android:background="@color/tab"
-       app:tabTextColor="@color/white"
-       app:tabSelectedTextColor="@color/yellow"
-       app:tabIndicatorColor="@color/yellow"/>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/search_result_view_pager"
+    <fragment
+        android:id="@+id/fragment_nav_search_result"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/search_result_nav" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="65dp" />
 </LinearLayout>

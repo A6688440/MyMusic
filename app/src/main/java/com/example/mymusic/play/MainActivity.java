@@ -13,10 +13,9 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.mymusic.EventMessage;
-import com.example.mymusic.MainFragment;
+import com.example.mymusic.databinding.ActivityMainBinding;
+import com.example.mymusic.event.EventMessage;
 import com.example.mymusic.R;
-import com.example.mymusic.SearchFragment;
 import com.example.mymusic.mvp.view.BaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,18 +61,7 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
     @Override
     protected void initView() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_main, new MainFragment())
-                .commit();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_search, new SearchFragment())
-                .commit();
 
-
-        fragmentSearch.setVisibility(View.INVISIBLE);
-        fragmentMain.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -87,11 +75,11 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
         return new PlayPresenter();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-
 
 //        Glide.with(MainActivity.this)
 //                .load("http://p1.music.126.net/R5fsMgpLHC9mJbLLA6EKLA==/109951164561120345.jpg")
@@ -202,28 +190,28 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void SetFragmentEventMessage(EventMessage message) {
-        isShowView=message.isShowView();
-        if (message.isShowView()) {
-            fragmentMain.setVisibility(View.GONE);
-            fragmentSearch.setVisibility(View.VISIBLE);
-        } else {
-            fragmentSearch.setVisibility(View.GONE);
-            fragmentMain.setVisibility(View.VISIBLE);
-        }
+//        isShowView=message.isShowView();
+//        if (message.isShowView()) {
+//            fragmentMain.setVisibility(View.GONE);
+//            fragmentSearch.setVisibility(View.VISIBLE);
+//        } else {
+//            fragmentSearch.setVisibility(View.GONE);
+//            fragmentMain.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Override
     public void onBackPressed() {
-        if (isShowView) {
-            isShowView = false;
-
-            fragmentSearch.setVisibility(View.GONE);
-            fragmentMain.setVisibility(View.VISIBLE);
-            return;
-
-        } else {
+//        if (isShowView) {
+//            isShowView = false;
+//
+//            fragmentSearch.setVisibility(View.GONE);
+//            fragmentMain.setVisibility(View.VISIBLE);
+//            return;
+//
+//        } else {
             super.onBackPressed();
-        }
+//        }
     }
 
 
