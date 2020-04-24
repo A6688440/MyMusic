@@ -7,17 +7,13 @@ import org.litepal.crud.LitePalSupport;
  * Describe：
  */
 public class SearchHistoryBean extends LitePalSupport {
-    private String SearchHistory;
+    private String search;
 
-    public SearchHistoryBean() {
-
+    public String getSearch() {
+        return search;
     }
 
-    public String getSearchHistory() {
-        return SearchHistory;
-    }
-
-    public void setSearchHistory(String searchHistory) {
-        SearchHistory = searchHistory;
+    public void setSearch(String search) {
+        this.search = search;
     }
 }

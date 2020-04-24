@@ -1,4 +1,4 @@
-package com.example.mymusic;
+package com.example.mymusic.search.view_model;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -17,6 +17,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void addSearchKey(String s) {
+
         searchKey=null;
         searchKey=new MutableLiveData<>();
         searchKey.setValue(s);

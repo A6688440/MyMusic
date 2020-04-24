@@ -1,9 +1,10 @@
-package com.example.mymusic;
+package com.example.mymusic.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.mymusic.R;
 import com.example.mymusic.play.MainActivity;
 
 import java.util.concurrent.Executors;

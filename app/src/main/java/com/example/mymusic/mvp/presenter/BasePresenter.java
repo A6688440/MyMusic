@@ -17,12 +17,12 @@ public abstract class BasePresenter<V extends BaseView,M extends BaseModel,CONTR
 
 
     //让子类去实现 具体的mModel
-    public abstract M getmModelInstance();
+    public abstract M getModelInstance();
 
     public abstract  CONTRACT getContract();
 
     public BasePresenter() {
-        this.mModel = getmModelInstance();
+        this.mModel = getModelInstance();
     }
 
 
@@ -36,7 +36,6 @@ public abstract class BasePresenter<V extends BaseView,M extends BaseModel,CONTR
      */
     public void unBindView() {
         mView = null;
-
     }
 
 

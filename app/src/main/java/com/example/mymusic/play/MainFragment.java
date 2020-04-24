@@ -1,4 +1,4 @@
-package com.example.mymusic;
+package com.example.mymusic.play;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.mymusic.R;
 import com.example.mymusic.event.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;

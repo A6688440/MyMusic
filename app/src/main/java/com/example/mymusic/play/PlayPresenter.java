@@ -24,7 +24,7 @@ public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayC
 
 
     @Override
-    public PlayModel getmModelInstance() {
+    public PlayModel getModelInstance() {
         return new PlayModel(this);
     }
 

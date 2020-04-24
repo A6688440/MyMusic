@@ -43,15 +43,7 @@ public  class PlayModel extends BaseModel<PlayPresenter, IPlayContract.M> {
 
             @Override
             public void getSearchResult(String search, Observer<SearchSongBean> observer) {
-                Observable<SearchSongBean> getSingerImgUrl = ApiRetrofit
-                        .getInstanceSearch()
-                        .getApiServiceSearch()
-                        .getSearch(search,2);
 
-                getSingerImgUrl
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
             }
 
             @Override
