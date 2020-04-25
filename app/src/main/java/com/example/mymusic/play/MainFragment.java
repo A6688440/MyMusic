@@ -11,11 +11,14 @@ import android.widget.TextView;
 
 import com.example.mymusic.R;
 import com.example.mymusic.event.EventMessage;
+import com.example.mymusic.search.view_model.SongIdViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import butterknife.BindView;
@@ -62,11 +65,15 @@ public class MainFragment extends Fragment {
     @BindView(R.id.expand_list_view_song_list)
     ExpandableListView expandListViewSongList;
     private Unbinder unbinder;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
        // tvSeek.setOnClickListener(view1 ->EventBus.getDefault().postSticky(new EventMessage(true)) );
         unbinder = ButterKnife.bind(this, view);
+
         return view;
 
     }

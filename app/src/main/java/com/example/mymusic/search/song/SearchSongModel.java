@@ -1,4 +1,4 @@
-package com.example.mymusic.search;
+package com.example.mymusic.search.song;
 
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.mvp.model.BaseModel;
@@ -13,28 +13,29 @@ import io.reactivex.schedulers.Schedulers;
  * Created by SJC on 2020/4/24.
  * Describe：
  */
-public class SearchModel extends BaseModel<SearchPresenter,ISearch.M> {
+public class SearchSongModel extends BaseModel<SearchSongPresenter, ISearchSong.M> {
 
-    public SearchModel(SearchPresenter mPresenter) {
+    public SearchSongModel(SearchSongPresenter mPresenter) {
         super(mPresenter);
     }
 
 
     @Override
-    public ISearch.M getContract() {
-        return new ISearch.M() {
+    public ISearchSong.M getContract() {
+        return new ISearchSong.M() {
             @Override
-            public void getSearchResult(String search, Observer<SearchSongBean> observer) {
+            public void getSearchSongResult(String search, Observer<SearchSongBean> observer) {
                 Observable<SearchSongBean> getSingerImgUrl = ApiRetrofit
                         .getInstanceSearch()
                         .getApiServiceSearch()
-                        .getSearch(search,2);
+                        .getSearch(search, 2);
 
                 getSingerImgUrl
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);
             }
+
         };
     }
 

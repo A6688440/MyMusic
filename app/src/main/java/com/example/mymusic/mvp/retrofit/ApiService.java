@@ -1,5 +1,6 @@
 package com.example.mymusic.mvp.retrofit;
 
+import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.bean.SingerImgBean;
 import com.example.mymusic.bean.SongUrlBean;
@@ -9,9 +10,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -19,6 +18,22 @@ import retrofit2.http.Query;
  * Describe：Retrofit的接口
  */
 public interface ApiService {
+
+
+    /**
+     * 搜索专辑：https://c.y.qq.com/soso/fcgi-bin/client_search_cp?p=1&n=2&w=林宥嘉&format=json&t=8
+     * @param seek 搜索关键字
+     * @param offset 页数
+     */
+    @GET(Api.SEARCH_ALBUM)
+    Observable<SearchAlbumBean> searchAlbum(@Query("w") String seek, @Query("p")int offset);
+//
+//    /**
+//     * 专辑详细：https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?albummid=004YodY33zsWTT&format=json
+//     * @param id 专辑mid
+//     */
+//    @GET(Api.ALBUM_DETAIL)
+//    Observable<AlbumSong> getAlbumSong(@Query("albummid")String id)
 
 
     /**

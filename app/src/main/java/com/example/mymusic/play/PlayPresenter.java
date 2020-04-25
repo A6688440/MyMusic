@@ -9,7 +9,6 @@ import com.example.mymusic.mvp.disposable.SubscriptionManager;
 import com.example.mymusic.mvp.erroe.ExceptionHandle;
 import com.example.mymusic.mvp.model.BaseObserver;
 import com.example.mymusic.mvp.presenter.BasePresenter;
-import com.example.mymusic.mvp.retrofit.Api;
 
 import io.reactivex.disposables.Disposable;
 

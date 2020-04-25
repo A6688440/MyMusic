@@ -10,19 +10,15 @@ import androidx.lifecycle.ViewModel;
  */
 public class SearchViewModel extends ViewModel {
 
-    private  MutableLiveData<String> searchKey;
+    private final MutableLiveData<String> searchKey=new MutableLiveData<>();
 
     public MutableLiveData<String> getSearchKey() {
         return searchKey;
     }
 
     public void addSearchKey(String s) {
-
-        searchKey=null;
-        searchKey=new MutableLiveData<>();
         searchKey.setValue(s);
     }
-
 
 
 }

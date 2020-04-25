@@ -13,6 +13,7 @@ import com.example.mymusic.R;
 import com.example.mymusic.bean.SearchHistoryBean;
 import com.example.mymusic.search.view_model.SearchHistoryViewModel;
 import com.example.mymusic.search.view_model.SearchViewModel;
+import com.example.mymusic.search.view_model.SongIdViewModel;
 
 import org.litepal.LitePal;
 
@@ -23,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import butterknife.BindView;
@@ -47,23 +49,30 @@ public class SearchFragment extends Fragment {
     private NavController controller = null;
 
     private SearchViewModel model;
-    private SearchHistoryBean searchHistoryBean;
+    private SongIdViewModel songIdViewModel;
     private SearchHistoryViewModel stateModel;
+
     private String searchKey;
+    private SearchHistoryBean searchHistoryBean;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         unbinder = ButterKnife.bind(this, view);
+        model = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
+        model.addSearchKey("邓紫棋");
+        stateModel = new ViewModelProvider(requireActivity()).get(SearchHistoryViewModel.class);
+        stateModel.changeState(false);
+        songIdViewModel = new ViewModelProvider(requireActivity()).get(SongIdViewModel.class);
+        songIdViewModel.upDataSongId("xx");
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        model = new ViewModelProvider(requireActivity()).get(SearchViewModel.class);
-        stateModel = new ViewModelProvider(requireActivity()).get(SearchHistoryViewModel.class);
+
 
     }
 
@@ -97,16 +106,11 @@ public class SearchFragment extends Fragment {
                 searchHistoryBean = new SearchHistoryBean();
                 searchHistoryBean.setSearch(searchKey);
                 searchHistoryBean.save();
-
+                model.addSearchKey(searchKey);
                 if (!stateModel.getState().getValue()) {
-                    model.addSearchKey(searchKey);
-
-
                     controller = Navigation.findNavController(getActivity(), R.id.fragment_nav_search_result);
                     controller.navigate(R.id.action_searchHistoryFragment_to_searchResultFragment);
                 }
-
-
                 //进行网络请求
                 break;
         }

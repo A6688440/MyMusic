@@ -1,8 +1,7 @@
-package com.example.mymusic.search;
+package com.example.mymusic.search.song;
 
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.mvp.erroe.ExceptionHandle;
-import com.example.mymusic.mvp.model.BaseModel;
 import com.example.mymusic.mvp.model.BaseObserver;
 import com.example.mymusic.mvp.presenter.BasePresenter;
 
@@ -12,19 +11,19 @@ import io.reactivex.disposables.Disposable;
  * Created by SJC on 2020/4/24.
  * Describe：
  */
-public class SearchPresenter extends BasePresenter<SearchResultFragment, SearchModel, ISearch.P> {
+public class SearchSongPresenter extends BasePresenter<SongResultFragment, SearchSongModel, ISearchSong.P> {
 
     @Override
-    public SearchModel getModelInstance() {
-        return new SearchModel(this);
+    public SearchSongModel getModelInstance() {
+        return new SearchSongModel(this);
     }
 
     @Override
-    public ISearch.P getContract() {
-        return new ISearch.P() {
+    public ISearchSong.P getContract() {
+        return new ISearchSong.P() {
             @Override
             public void SearchKey(String searchKey) {
-                mModel.getContract().getSearchResult(searchKey, new BaseObserver<SearchSongBean>() {
+                mModel.getContract().getSearchSongResult(searchKey, new BaseObserver<SearchSongBean>() {
                     @Override
                     public void OnSuccess(SearchSongBean searchSongBean) {
                         mView.getContract().getResult(searchSongBean);

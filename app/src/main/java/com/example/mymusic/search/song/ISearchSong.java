@@ -1,4 +1,4 @@
-package com.example.mymusic.search;
+package com.example.mymusic.search.song;
 
 import com.example.mymusic.bean.SearchSongBean;
 
@@ -8,10 +8,11 @@ import io.reactivex.Observer;
  * Created by SJC on 2020/4/24.
  * Describe：
  */
-public interface ISearch {
+public interface ISearchSong {
 
     interface V {
-        void getResult(SearchSongBean SearchSongBean);
+        void getResult(SearchSongBean searchSongBean);
+
     }
 
 
@@ -20,6 +21,6 @@ public interface ISearch {
     }
 
     interface M {
-        void getSearchResult(String search, Observer<SearchSongBean> observer);
+        void getSearchSongResult(String search, Observer<SearchSongBean> observer);
     }
 }

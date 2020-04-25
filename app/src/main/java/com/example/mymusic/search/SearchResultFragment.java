@@ -1,17 +1,14 @@
 package com.example.mymusic.search;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mymusic.adapter.SearchViewPager2Adapter;
-import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.databinding.FragmentSearchResultBinding;
-import com.example.mymusic.mvp.view.BaseFragment;
-import com.example.mymusic.search.result.AlbumResultFragment;
-import com.example.mymusic.search.result.SongResultFragment;
+import com.example.mymusic.search.album.AlbumResultFragment;
+import com.example.mymusic.search.song.SongResultFragment;
 import com.example.mymusic.search.view_model.SearchHistoryViewModel;
 import com.example.mymusic.search.view_model.SearchViewModel;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -27,7 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchResultFragment extends BaseFragment<SearchPresenter, ISearch.V> {
+public class SearchResultFragment extends Fragment {
 
     private String searchKey;
     private final String TAG = "SearchResultFragment";
@@ -41,21 +38,7 @@ public class SearchResultFragment extends BaseFragment<SearchPresenter, ISearch.
     private FragmentSearchResultBinding binding;
     private List<Fragment> fragments;
 
-    @Override
-    protected SearchPresenter getPresenterInstance() {
-        return new SearchPresenter();
-    }
 
-    @Override
-    public ISearch.V getContract() {
-        return new ISearch.V() {
-
-            @Override
-            public void getResult(SearchSongBean SearchSongBean) {
-                Log.e(TAG, "getResult: " + SearchSongBean.toString());
-            }
-        };
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,8 +81,5 @@ public class SearchResultFragment extends BaseFragment<SearchPresenter, ISearch.
             }
         }).attach();
 
-        //实质性去恩网络请求的地方
-        Log.e(TAG, "onActivityCreated: "+searchKey );
-        mPresenter.getContract().SearchKey(searchKey);
     }
 }

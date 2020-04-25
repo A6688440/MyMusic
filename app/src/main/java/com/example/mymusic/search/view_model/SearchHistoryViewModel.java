@@ -8,19 +8,21 @@ import androidx.lifecycle.ViewModel;
  * Describe：
  */
 public class SearchHistoryViewModel extends ViewModel {
-    private MutableLiveData<Boolean> state;
+    private final MutableLiveData<Boolean> state=new MutableLiveData<>();
 
     public MutableLiveData<Boolean> getState() {
-        if (state == null) {
-            state = new MutableLiveData<>();
-            state.setValue(false);
-        }
+//        if (state == null) {
+//            state = new MutableLiveData<>();
+//            changeState(false);
+//        }
         return state;
     }
 
     public void changeState(Boolean aBoolean) {
-        state = null;
-        state = new MutableLiveData<>();
+//        if (state == null) {
+//            state = new MutableLiveData<>();
+//            changeState(false);
+//        }
         state.setValue(aBoolean);
     }
 }

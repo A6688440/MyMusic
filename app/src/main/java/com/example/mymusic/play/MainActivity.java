@@ -3,9 +3,9 @@ package com.example.mymusic.play;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.mymusic.databinding.ActivityMainBinding;
-import com.example.mymusic.event.EventMessage;
 import com.example.mymusic.R;
+import com.example.mymusic.event.EventMessage;
 import com.example.mymusic.mvp.view.BaseActivity;
+import com.example.mymusic.search.view_model.SongIdViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,12 +26,15 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
+    private final String TAG="MainActivity";
 
     @BindView(R.id.play_seek_bar)
     SeekBar playSeekBar;
@@ -45,13 +48,12 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
     CircleImageView circleSingerImage;
     @BindView(R.id.main_play)
     RelativeLayout mainPlay;
-    @BindView(R.id.fragment_main)
-    FrameLayout fragmentMain;
-    @BindView(R.id.fragment_search)
-    FrameLayout fragmentSearch;
+
     private MediaPlayer mMediaPlayer;
     private Timer timer;
-    private boolean isShowView = false;
+
+
+    private SongIdViewModel songIdViewModel;
 
 
     @Override
@@ -61,12 +63,18 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
     @Override
     protected void initView() {
-
+        songIdViewModel=new ViewModelProvider(this).get(SongIdViewModel.class);
     }
 
     @Override
     protected void initData() {
+        songIdViewModel.getSingId().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.e(TAG, "onChanged: "+s );
 
+            }
+        });
     }
 
 
