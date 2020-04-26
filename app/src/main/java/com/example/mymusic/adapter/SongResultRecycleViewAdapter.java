@@ -75,7 +75,7 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
 
             CommonUtil.showStringColor(searchKey, singer.toString(), holder.songAuthor);
             CommonUtil.showStringColor(searchKey, list.get(position).getSongname(), holder.songTitle);
-            Log.e(TAG, "onBindViewHolder: " + position);
+
             if (list.get(position).getSongmid().equals(songId)) {
                 holder.playLine.setVisibility(View.VISIBLE);
                 holder.mItemView.setBackgroundResource(R.color.translucent);
@@ -83,8 +83,9 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
                 holder.playLine.setVisibility(View.INVISIBLE);
                 holder.mItemView.setBackgroundResource(R.color.transparent);
             }
+
             holder.mItemView.setOnClickListener(view -> {
-                callBack.ItemOnClickListener(view, list.get(position).getSongmid(), position);
+                callBack.ItemOnClickListener(list.get(position).getSongmid(),list.get(position).getAlbummid(),position);
                 songId=list.get(position).getSongmid();
             });
 
@@ -134,6 +135,6 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface MySongItemCallBack {
-        void ItemOnClickListener(View view, String songId, int position);
+        void ItemOnClickListener(String songId,String albumId,int position);
     }
 }

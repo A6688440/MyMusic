@@ -96,6 +96,8 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 //        mPresenter.getContract().getSingerImgUrl("邓紫棋");
 //        mPresenter.getContract().getSearch("艾热");
 
+
+
     }
 
     @Override
@@ -110,8 +112,8 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
             }
 
             @Override
-            public void getSongUrl(String songUrl, int SongTime) {
-
+            public void getSongUrl(String songUrl) {
+               // int SongTime=0;
                 mMediaPlayer = new MediaPlayer();
                 try {
                     mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -198,14 +200,7 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void SetFragmentEventMessage(EventMessage message) {
-//        isShowView=message.isShowView();
-//        if (message.isShowView()) {
-//            fragmentMain.setVisibility(View.GONE);
-//            fragmentSearch.setVisibility(View.VISIBLE);
-//        } else {
-//            fragmentSearch.setVisibility(View.GONE);
-//            fragmentMain.setVisibility(View.VISIBLE);
-//        }
+
     }
 
     @Override

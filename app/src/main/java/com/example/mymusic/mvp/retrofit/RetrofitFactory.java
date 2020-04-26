@@ -24,11 +24,6 @@ public class RetrofitFactory {
 
 
 
-
-
-
-
-
     //获取接口实例
 
     //创建网络请求Observable

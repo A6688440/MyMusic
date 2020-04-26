@@ -2,6 +2,8 @@ package com.example.mymusic.play;
 
 import android.util.Log;
 
+import com.example.mymusic.bean.AlbumInfoBean;
+import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.bean.SingerImgBean;
 import com.example.mymusic.bean.SongUrlBean;
@@ -17,7 +19,7 @@ import io.reactivex.disposables.Disposable;
  * Created by SJC on 2020/4/19.
  * Describe：
  */
-public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayContract.P>  {
+public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayContract.P> {
 
     private final String TAG = "123456";
 
@@ -32,41 +34,15 @@ public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayC
     public IPlayContract.P getContract() {
         return new IPlayContract.P() {
             @Override
-            public void getSingerImgUrl(String singerName) {
-                mModel.getContract().getSingerImgUrl(singerName, new BaseObserver<SingerImgBean>() {
+            public void getImgUrl(String albumId, String singer) {
+                mModel.getContract().getSearchAlbum(singer, new BaseObserver<SearchAlbumBean>() {
                     @Override
-                    public void OnSuccess(SingerImgBean singerImgBean) {
-                        Log.e(TAG, "OnSuccess: "+singerImgBean.getResult().getArtists().get(0).getImg1v1Url() );
-                        mView.onSuccess(singerImgBean.getResult().getArtists().get(0).getImg1v1Url());
-                        mView.getContract().getSingerImgUrl(singerImgBean.getResult().getArtists().get(0).getImg1v1Url());
-                    }
-
-                    @Override
-                    public void OnFail(ExceptionHandle.ResponseThrowable e) {
-                        mView.onFail(e);
-                    }
-
-                    @Override
-                    public void OnCompleted() {
-                        mView.OnCompleted();
-                    }
-
-                    @Override
-                    public void OnDisposable(Disposable d) {
-                        SubscriptionManager.getInstance().add(d);
-                    }
-
-                });
-            }
-
-            @Override
-            public void getSearch(String search) {
-                mModel.getContract().getSearchResult(search, new BaseObserver<SearchSongBean>() {
-                    @Override
-                    public void OnSuccess(SearchSongBean searchSongBean) {
-                        int SongTime=searchSongBean.getData().getSong().getList().get(0).getInterval();
-                        String  SongId=searchSongBean.getData().getSong().getList().get(0).getSongmid();
-                        getSongId(SongId,SongTime);
+                    public void OnSuccess(SearchAlbumBean searchAlbumBean) {
+                        for (SearchAlbumBean.DataBean.AlbumBean.ListBean listBean : searchAlbumBean.getData().getAlbum().getList()) {
+                            if (listBean.getAlbumMID().equals(albumId)) {
+                                mView.getContract().getSingerImgUrl(listBean.getAlbumPic());
+                            }
+                        }
                     }
 
                     @Override
@@ -81,20 +57,20 @@ public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayC
 
                     @Override
                     public void OnDisposable(Disposable d) {
-                        SubscriptionManager.getInstance().add(d);
+
                     }
                 });
             }
 
             @Override
-            public void getSongId(String SongId, int SongTime) {
-                mModel.getContract().getSongUrl(SongId, new BaseObserver<SongUrlBean>() {
+            public void getSongUrl(String songId) {
+                mModel.getContract().getSongUrl(songId, new BaseObserver<SongUrlBean>() {
                     @Override
                     public void OnSuccess(SongUrlBean songUrlBean) {
-                        String url= songUrlBean.getReq_0().getData().getSip().get(0)
-                                +songUrlBean.getReq_0().getData().getMidurlinfo().get(0).getPurl();
-
-                        mView.getContract().getSongUrl(url,SongTime);
+                        //得到网络请求的结果，进行拼接SongUrl
+                        String url = songUrlBean.getReq_0().getData().getSip().get(0)
+                                + songUrlBean.getReq_0().getData().getMidurlinfo().get(0).getPurl();
+                        mView.getContract().getSongUrl(url);
                     }
 
                     @Override
@@ -112,10 +88,8 @@ public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayC
                         SubscriptionManager.getInstance().add(d);
                     }
                 });
-
             }
-
-
         };
+
     }
 }

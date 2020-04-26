@@ -1,5 +1,6 @@
 package com.example.mymusic.mvp.retrofit;
 
+import com.example.mymusic.bean.AlbumInfoBean;
 import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.bean.SingerImgBean;
@@ -27,13 +28,13 @@ public interface ApiService {
      */
     @GET(Api.SEARCH_ALBUM)
     Observable<SearchAlbumBean> searchAlbum(@Query("w") String seek, @Query("p")int offset);
-//
-//    /**
-//     * 专辑详细：https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?albummid=004YodY33zsWTT&format=json
-//     * @param id 专辑mid
-//     */
-//    @GET(Api.ALBUM_DETAIL)
-//    Observable<AlbumSong> getAlbumSong(@Query("albummid")String id)
+
+    /**
+     * 专辑详细：https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?albummid=004YodY33zsWTT&format=json
+     * @param id 专辑mid
+     */
+    @GET(Api.ALBUM_DETAIL)
+    Observable<AlbumInfoBean> getAlbumInfo(@Query("albummid")String id);
 
 
     /**
@@ -65,6 +66,8 @@ public interface ApiService {
     @POST(Api.SINGER_PIC)
     @FormUrlEncoded
     Observable<SingerImgBean> getSingerImg(@Field("s")String singer);
+
+
 
 
 }

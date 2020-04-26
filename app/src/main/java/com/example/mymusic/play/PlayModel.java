@@ -1,5 +1,7 @@
 package com.example.mymusic.play;
 
+import com.example.mymusic.bean.AlbumInfoBean;
+import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.bean.SingerImgBean;
 import com.example.mymusic.bean.SongUrlBean;
@@ -17,7 +19,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by SJC on 2020/4/19.
  * Describe：model 实现网络请求
  */
-public  class PlayModel extends BaseModel<PlayPresenter, IPlayContract.M> {
+public class PlayModel extends BaseModel<PlayPresenter, IPlayContract.M> {
 
     private final String TAG = "123456";
 
@@ -28,30 +30,29 @@ public  class PlayModel extends BaseModel<PlayPresenter, IPlayContract.M> {
     @Override
     public IPlayContract.M getContract() {
         return new IPlayContract.M() {
-            @Override
-            public void getSingerImgUrl(String singerName, Observer<SingerImgBean> observer) {
-                    Observable<SingerImgBean> getSingerImgUrl = ApiRetrofit
-                            .getInstance()
-                            .getApiService()
-                            .getSingerImg(singerName);
-                    getSingerImgUrl
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(observer);
 
+            //专辑列表，用来获取图片Url
+            @Override
+            public void getSearchAlbum(String searchKey, Observer<SearchAlbumBean> observer) {
+                Observable<SearchAlbumBean> getAlbumInfo = ApiRetrofit
+                        .getInstanceSearch()
+                        .getApiServiceSearch()
+                        .searchAlbum(searchKey, 2);
+
+                getAlbumInfo
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
             }
 
-            @Override
-            public void getSearchResult(String search, Observer<SearchSongBean> observer) {
-
-            }
-
+            //通过songId获取歌曲Url
             @Override
             public void getSongUrl(String songId, Observer<SongUrlBean> observer) {
                 Observable<SongUrlBean> getSingerImgUrl = ApiRetrofit
                         .getInstanceSong()
                         .getApiServiceSong()
-                        .getSongUrl(Api.SONG_URL_DATA_LEFT+songId+Api.SONG_URL_DATA_RIGHT);
+
+                        .getSongUrl(Api.SONG_URL_DATA_LEFT + songId + Api.SONG_URL_DATA_RIGHT);
 
                 getSingerImgUrl
                         .subscribeOn(Schedulers.io())

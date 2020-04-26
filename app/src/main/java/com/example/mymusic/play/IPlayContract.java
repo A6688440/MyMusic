@@ -1,5 +1,7 @@
 package com.example.mymusic.play;
 
+import com.example.mymusic.bean.AlbumInfoBean;
+import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.bean.SingerImgBean;
 import com.example.mymusic.bean.SongUrlBean;
@@ -16,7 +18,7 @@ public interface IPlayContract {
     interface V {
         void getSingerImgUrl(String SingerImgUrl);//将图片设置成背景
 
-        void getSongUrl(String songUrl,int SongTime);//获取歌曲的url、和时长
+        void getSongUrl(String songUrl);//获取歌曲的url、和时长
 
         /*String getSingerName();//得到歌手的姓名
 
@@ -47,22 +49,27 @@ public interface IPlayContract {
         //传给Presenter
 
         //传歌手得到照片地址
-        void getSingerImgUrl(String singerName);
+        //void getSingerImgUrl(String singerName);
 
         //传搜索的关键字
-        void getSearch(String search);
+       // void getSearch(String search);
 
         //传递
-        void getSongId(String SongId,int SongTime);
+       // void getSongId(String SongId,int SongTime);
+
+        //-----------------------------
+
+        void getImgUrl(String albumId,String singer);
+
+        void getSongUrl(String songId);
+        //---------------------------
     }
 
 
     //model需要的方法
     interface M {
 
-       void getSingerImgUrl(String singerName, Observer<SingerImgBean> observer);
-
-       void getSearchResult(String search, Observer<SearchSongBean> observer);
+       void getSearchAlbum(String searchKey, Observer<SearchAlbumBean> observer);
 
        void getSongUrl(String songId,Observer<SongUrlBean> observer);
     }

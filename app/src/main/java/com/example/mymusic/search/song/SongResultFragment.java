@@ -12,9 +12,12 @@ import com.example.mymusic.adapter.SongResultRecycleViewAdapter;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.databinding.FragmentSearchResultBinding;
 import com.example.mymusic.databinding.FragmentSongResultBinding;
+import com.example.mymusic.event.EventMessage;
 import com.example.mymusic.mvp.view.BaseFragment;
 import com.example.mymusic.search.view_model.SearchViewModel;
 import com.example.mymusic.search.view_model.SongIdViewModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 import java.util.Timer;
@@ -67,10 +70,8 @@ public class SongResultFragment extends BaseFragment<SearchSongPresenter, ISearc
             list = searchSongBean.getData().getSong().getList();
             adapter = new
                     SongResultRecycleViewAdapter(list,
-                    searchKey, songId, (view, songmId, i) -> {
-                setSongId = new ViewModelProvider(requireActivity()).get(SongIdViewModel.class);
-                setSongId.upDataSongId(songmId);
-
+                    searchKey, songId, (songmId, albumId, i) -> {
+                EventBus.getDefault().postSticky(new EventMessage(songmId, albumId, searchKey));
             });
 
             manager = new LinearLayoutManager(getContext());
@@ -112,5 +113,11 @@ public class SongResultFragment extends BaseFragment<SearchSongPresenter, ISearc
                 }, 1000);//延时1s执行
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
     }
 }

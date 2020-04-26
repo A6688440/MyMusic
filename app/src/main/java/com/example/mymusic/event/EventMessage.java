@@ -5,17 +5,37 @@ package com.example.mymusic.event;
  * Describe：
  */
 public class EventMessage {
-    private boolean ShowView;
+    private String songId;
+    private String albumId;
+    private String singer;
 
-    public EventMessage(boolean showView) {
-        ShowView = showView;
+    public EventMessage(String songId, String albumId, String singer) {
+        this.songId = songId;
+        this.albumId = albumId;
+        this.singer = singer;
     }
 
-    public boolean isShowView() {
-        return ShowView;
+    public String getSongId() {
+        return songId;
     }
 
-    public void setShowView(boolean showView) {
-        ShowView = showView;
+    public void setSongId(String songId) {
+        this.songId = songId;
+    }
+
+    public String getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
+    public String getSinger() {
+        return singer;
+    }
+
+    public void setSinger(String singer) {
+        this.singer = singer;
     }
 }
