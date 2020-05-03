@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andexert.library.RippleView;
 import com.bumptech.glide.Glide;
@@ -34,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
-    private final String TAG="MainActivity";
+    private final String TAG = "MainActivity";
 
     @BindView(R.id.play_seek_bar)
     SeekBar playSeekBar;
@@ -48,12 +49,16 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
     CircleImageView circleSingerImage;
     @BindView(R.id.main_play)
     RelativeLayout mainPlay;
+    @BindView(R.id.tv_singers)
+    TextView singers;
 
     private MediaPlayer mMediaPlayer;
     private Timer timer;
 
 
     private SongIdViewModel songIdViewModel;
+
+    private EventMessage message;
 
 
     @Override
@@ -63,7 +68,7 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
     @Override
     protected void initView() {
-        songIdViewModel=new ViewModelProvider(this).get(SongIdViewModel.class);
+        songIdViewModel = new ViewModelProvider(this).get(SongIdViewModel.class);
     }
 
     @Override
@@ -71,7 +76,7 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
         songIdViewModel.getSingId().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.e(TAG, "onChanged: "+s );
+                Log.e(TAG, "onChanged: " + s);
 
             }
         });
@@ -89,31 +94,29 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
 
-//        Glide.with(MainActivity.this)
-//                .load("http://p1.music.126.net/R5fsMgpLHC9mJbLLA6EKLA==/109951164561120345.jpg")
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(circleSingerImage);
-//        mPresenter.getContract().getSingerImgUrl("邓紫棋");
-//        mPresenter.getContract().getSearch("艾热");
-
-
-
     }
 
     @Override
     public IPlayContract.V getContract() {
         return new IPlayContract.V() {
             @Override
-            public void getSingerImgUrl(String SingerImgUrl) {
-                Glide.with(MainActivity.this)
-                        .load(SingerImgUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(circleSingerImage);
+            public void getSongUrlFail(String Message) {
+                if (Message.equals("")) {
+                    String url = "http://y.gtimg.cn/music/photo_new/T002R180x180M000" + message.getAlbumId() + ".jpg";
+                    Glide.with(MainActivity.this)
+                            .load(url)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(circleSingerImage);
+                    songName.setText(message.getSongName());
+                    singers.setText(message.getSingers().toString());
+                } else {
+                    Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void getSongUrl(String songUrl) {
-               // int SongTime=0;
+                // int SongTime=0;
                 mMediaPlayer = new MediaPlayer();
                 try {
                     mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -127,12 +130,16 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
                 }
                 playSeekBar.setMax(mMediaPlayer.getDuration());//设置最长的进度条
                 getProgress();
+                SongIdViewModel songIdViewModel= new ViewModelProvider(MainActivity.this).get(SongIdViewModel.class);
+                songIdViewModel.upDataSongId(message.getSongId());
             }
-
         };
     }
 
 
+    /**
+     * 歌曲进度条
+     */
     private void getProgress() {
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -200,23 +207,13 @@ public class MainActivity extends BaseActivity<PlayPresenter, IPlayContract.V> {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void SetFragmentEventMessage(EventMessage message) {
-
+        this.message = message;
+        if(!message.getSongId().equals("")){
+            mPresenter.getContract().getSongUrl(message.getSongId());
+        }else {
+            Toast.makeText(context, "没版权", Toast.LENGTH_SHORT).show();
+        }
     }
-
-    @Override
-    public void onBackPressed() {
-//        if (isShowView) {
-//            isShowView = false;
-//
-//            fragmentSearch.setVisibility(View.GONE);
-//            fragmentMain.setVisibility(View.VISIBLE);
-//            return;
-//
-//        } else {
-            super.onBackPressed();
-//        }
-    }
-
 
     @Override
     protected void onDestroy() {

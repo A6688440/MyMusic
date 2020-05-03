@@ -16,7 +16,7 @@ public interface IPlayContract {
 
     //view 需要的方法
     interface V {
-        void getSingerImgUrl(String SingerImgUrl);//将图片设置成背景
+        void getSongUrlFail(String Message);
 
         void getSongUrl(String songUrl);//获取歌曲的url、和时长
 
@@ -59,7 +59,7 @@ public interface IPlayContract {
 
         //-----------------------------
 
-        void getImgUrl(String albumId,String singer);
+
 
         void getSongUrl(String songId);
         //---------------------------
@@ -68,8 +68,6 @@ public interface IPlayContract {
 
     //model需要的方法
     interface M {
-
-       void getSearchAlbum(String searchKey, Observer<SearchAlbumBean> observer);
 
        void getSongUrl(String songId,Observer<SongUrlBean> observer);
     }

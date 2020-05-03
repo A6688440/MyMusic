@@ -1,17 +1,23 @@
 package com.example.mymusic.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andexert.library.RippleView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.mymusic.R;
+import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.utils.CommonUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -26,47 +32,63 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     private static final String TAG = "SongResultRecycleViewAdapter";
     private int mLastPosition = -1;
 
-    private final int songType = 1;
-    private final int footerType = 2;
+//    private final int songType = 1;
+//    private final int albumType = 2;
 
     private List<SearchSongBean.DataBean.SongBean.ListBean> list;
+
+    private List<SearchAlbumBean.DataBean.AlbumBean.ListBean> albumList;
     private String searchKey;
     private String songId;
+    private String albumId;
     private MySongItemCallBack callBack;
+    private MyAlbumItemCallBack albumItemCallBack;
+    private int mType;
+    private Context context;
 
-    @SuppressLint("LongLogTag")
-    public SongResultRecycleViewAdapter(List<SearchSongBean.DataBean.SongBean.ListBean> list, String searchKey, String songId, MySongItemCallBack callBack) {
+    public SongResultRecycleViewAdapter(List<SearchSongBean.DataBean.SongBean.ListBean> list, int mType, String searchKey, String songId, MySongItemCallBack callBack) {
         this.list = list;
         this.songId = songId;
         this.callBack = callBack;
         this.searchKey = searchKey;
-        Log.e(TAG, "SongResultRecycleViewAdapter: " + songId);
+        this.mType = mType;
 
     }
+
+    public SongResultRecycleViewAdapter(List<SearchAlbumBean.DataBean.AlbumBean.ListBean> albumList, String searchKey, int mType, Context context, MyAlbumItemCallBack albumItemCallBack) {
+        this.albumList = albumList;
+        this.searchKey = searchKey;
+        this.albumId = albumId;
+        this.albumItemCallBack = albumItemCallBack;
+        this.mType = mType;
+        this.context = context;
+    }
+
 
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        if (viewType == songType) {
-            View view = LayoutInflater.from(parent.getContext()).
+        View view;
+        if (viewType == CommonUtil.SongResultType) {
+            view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.recycler_item_song_result, parent, false);
-            ViewHolder viewHolder = new ViewHolder(view);
-            return viewHolder;
-        } else {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.footer_view_player_height, parent, false);
-            FooterHolder footerHolder = new FooterHolder(view);
-            return footerHolder;
+            SongHolder songHolder = new SongHolder(view);
+            return songHolder;
+        } else if (viewType == CommonUtil.AlbumResultType) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recycler_item_album_result, parent, false);
+            AlbumHolder albumHolder = new AlbumHolder(view);
+            return albumHolder;
         }
+        return null;
     }
 
-    @SuppressLint("LongLogTag")
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if (viewHolder instanceof ViewHolder) {
-            ViewHolder holder = (ViewHolder) viewHolder;
+        if (viewHolder instanceof SongHolder) {
+            SongHolder holder = (SongHolder) viewHolder;
 
             StringBuilder singer = new StringBuilder(list.get(position).getSinger().get(0).getName());
             for (int i = 1; i < list.get(position).getSinger().size(); i++) {
@@ -85,31 +107,58 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
             }
 
             holder.mItemView.setOnClickListener(view -> {
-                callBack.ItemOnClickListener(list.get(position).getSongmid(),list.get(position).getAlbummid(),position);
-                songId=list.get(position).getSongmid();
+                List<String> stringList = new ArrayList<>();
+                for (SearchSongBean.DataBean.SongBean.ListBean.SingerBean singerBean : list.get(position).getSinger()) {
+                    stringList.add(singerBean.getName());
+                }
+
+                callBack.ItemOnClickListener(list.get(position).getSongmid(),
+                        list.get(position).getAlbummid(),
+                        list.get(position).getSongname(),
+                        stringList,
+                        position);
+                songId = list.get(position).getSongmid();
             });
 
+        } else {
+            AlbumHolder albumHolder = (AlbumHolder) viewHolder;
+            Glide.with(context).load(albumList.get(position).getAlbumPic())
+                    .apply(RequestOptions.errorOf(R.drawable.background)).into(albumHolder.albumIv);
+            albumHolder.albumName.setText(albumList.get(position).getAlbumName());
+            albumHolder.singerName.setText(albumList.get(position).getSingerName());
+            albumHolder.publicTime.setText(albumList.get(position).getPublicTime());
+            CommonUtil.showStringColor(searchKey, albumList.get(position).getAlbumName(), albumHolder.albumName);
+            CommonUtil.showStringColor(searchKey, albumList.get(position).getSingerName(), albumHolder.singerName);
+            CommonUtil.showStringColor(searchKey, albumList.get(position).getPublicTime(), albumHolder.publicTime);
+            albumHolder.item.setOnRippleCompleteListener(rippleView -> {
+                albumItemCallBack.ItemOnClickListener(albumList.get(position).getAlbumMID(), rippleView);
+            });
         }
     }
 
 
     @Override
     public int getItemCount() {
-        return list.size() + 1;
+        if (mType == CommonUtil.SongResultType) {
+            return list.size();
+        } else if (mType == CommonUtil.AlbumResultType) {
+            return albumList.size();
+        }
+        return 0;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position + 1 == getItemCount() ? footerType : songType;
+        return mType;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class SongHolder extends RecyclerView.ViewHolder {
 
         TextView songTitle, songAuthor;
         RippleView mItemView;
         View playLine;
 
-        public ViewHolder(@NonNull View itemView) {
+        public SongHolder(@NonNull View itemView) {
             super(itemView);
             songTitle = itemView.findViewById(R.id.item_song_title);
             songAuthor = itemView.findViewById(R.id.item_song_author);
@@ -118,10 +167,20 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    static class FooterHolder extends RecyclerView.ViewHolder {
+    static class AlbumHolder extends RecyclerView.ViewHolder {
+        ImageView albumIv;
+        TextView singerName;
+        TextView albumName;
+        TextView publicTime;
+        RippleView item;
 
-        public FooterHolder(@NonNull View itemView) {
+        public AlbumHolder(@NonNull View itemView) {
             super(itemView);
+            albumIv = itemView.findViewById(R.id.iv_album);
+            singerName = itemView.findViewById(R.id.tv_singer_name);
+            albumName = itemView.findViewById(R.id.tv_album_name);
+            publicTime = itemView.findViewById(R.id.tv_public_time);
+            item = itemView.findViewById(R.id.ripple);
         }
     }
 
@@ -135,6 +194,10 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public interface MySongItemCallBack {
-        void ItemOnClickListener(String songId,String albumId,int position);
+        void ItemOnClickListener(String songId, String albumId, String songName, List<String> singers, int position);
+    }
+
+    public interface MyAlbumItemCallBack {
+        void ItemOnClickListener(String albumId, RippleView rippleView);
     }
 }

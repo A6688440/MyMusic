@@ -16,6 +16,7 @@ import com.example.mymusic.event.EventMessage;
 import com.example.mymusic.mvp.view.BaseFragment;
 import com.example.mymusic.search.view_model.SearchViewModel;
 import com.example.mymusic.search.view_model.SongIdViewModel;
+import com.example.mymusic.utils.CommonUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -69,9 +70,12 @@ public class SongResultFragment extends BaseFragment<SearchSongPresenter, ISearc
         return searchSongBean -> {
             list = searchSongBean.getData().getSong().getList();
             adapter = new
-                    SongResultRecycleViewAdapter(list,
-                    searchKey, songId, (songmId, albumId, i) -> {
-                EventBus.getDefault().postSticky(new EventMessage(songmId, albumId, searchKey));
+                    SongResultRecycleViewAdapter(list,CommonUtil.SongResultType,
+                    searchKey, songId,  new SongResultRecycleViewAdapter.MySongItemCallBack() {
+                @Override
+                public void ItemOnClickListener(String songmId, String albumId, String songName, List<String> singers, int position) {
+                    EventBus.getDefault().postSticky(new EventMessage(songmId, albumId, songName, singers));
+                }
             });
 
             manager = new LinearLayoutManager(getContext());
@@ -91,26 +95,13 @@ public class SongResultFragment extends BaseFragment<SearchSongPresenter, ISearc
             searchKey = s;
             mPresenter.getContract().SearchKey(s);
 
-
         });
 
         songIdViewModel = new ViewModelProvider(requireActivity()).get(SongIdViewModel.class);
-//        songIdViewModel.upDataSongId("xx");
         songIdViewModel.getSingId().observe(requireActivity(), s -> {
             songId = s;
-            Log.e(TAG, "onViewCreated: " + songId);
             if (adapter != null) {
-
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(() -> {
-                            adapter.notifyDataSetChanged();
-
-                        });
-                    }
-                }, 1000);//延时1s执行
+                adapter.notifyDataSetChanged();
             }
         });
     }

@@ -31,19 +31,6 @@ public class PlayModel extends BaseModel<PlayPresenter, IPlayContract.M> {
     public IPlayContract.M getContract() {
         return new IPlayContract.M() {
 
-            //专辑列表，用来获取图片Url
-            @Override
-            public void getSearchAlbum(String searchKey, Observer<SearchAlbumBean> observer) {
-                Observable<SearchAlbumBean> getAlbumInfo = ApiRetrofit
-                        .getInstanceSearch()
-                        .getApiServiceSearch()
-                        .searchAlbum(searchKey, 2);
-
-                getAlbumInfo
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
-            }
 
             //通过songId获取歌曲Url
             @Override
@@ -51,7 +38,6 @@ public class PlayModel extends BaseModel<PlayPresenter, IPlayContract.M> {
                 Observable<SongUrlBean> getSingerImgUrl = ApiRetrofit
                         .getInstanceSong()
                         .getApiServiceSong()
-
                         .getSongUrl(Api.SONG_URL_DATA_LEFT + songId + Api.SONG_URL_DATA_RIGHT);
 
                 getSingerImgUrl

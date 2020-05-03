@@ -1,18 +1,23 @@
 package com.example.mymusic.event;
 
+import java.util.List;
+
 /**
  * Created by SJC on 2020/4/22.
  * Describe：
  */
 public class EventMessage {
+    //歌曲的Id   专辑Id   歌名  歌手s
     private String songId;
     private String albumId;
-    private String singer;
+    private String songName;
+    private List<String> singers;
 
-    public EventMessage(String songId, String albumId, String singer) {
+    public EventMessage(String songId, String albumId, String songName, List<String> singers) {
         this.songId = songId;
         this.albumId = albumId;
-        this.singer = singer;
+        this.songName = songName;
+        this.singers = singers;
     }
 
     public String getSongId() {
@@ -31,11 +36,19 @@ public class EventMessage {
         this.albumId = albumId;
     }
 
-    public String getSinger() {
-        return singer;
+    public String getSongName() {
+        return songName;
     }
 
-    public void setSinger(String singer) {
-        this.singer = singer;
+    public void setSongName(String songName) {
+        this.songName = songName;
+    }
+
+    public List<String> getSingers() {
+        return singers;
+    }
+
+    public void setSingers(List<String> singers) {
+        this.singers = singers;
     }
 }

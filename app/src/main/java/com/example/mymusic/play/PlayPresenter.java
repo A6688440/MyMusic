@@ -33,34 +33,6 @@ public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayC
     @Override
     public IPlayContract.P getContract() {
         return new IPlayContract.P() {
-            @Override
-            public void getImgUrl(String albumId, String singer) {
-                mModel.getContract().getSearchAlbum(singer, new BaseObserver<SearchAlbumBean>() {
-                    @Override
-                    public void OnSuccess(SearchAlbumBean searchAlbumBean) {
-                        for (SearchAlbumBean.DataBean.AlbumBean.ListBean listBean : searchAlbumBean.getData().getAlbum().getList()) {
-                            if (listBean.getAlbumMID().equals(albumId)) {
-                                mView.getContract().getSingerImgUrl(listBean.getAlbumPic());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void OnFail(ExceptionHandle.ResponseThrowable e) {
-
-                    }
-
-                    @Override
-                    public void OnCompleted() {
-
-                    }
-
-                    @Override
-                    public void OnDisposable(Disposable d) {
-
-                    }
-                });
-            }
 
             @Override
             public void getSongUrl(String songId) {
@@ -70,7 +42,13 @@ public class PlayPresenter extends BasePresenter<MainActivity, PlayModel, IPlayC
                         //得到网络请求的结果，进行拼接SongUrl
                         String url = songUrlBean.getReq_0().getData().getSip().get(0)
                                 + songUrlBean.getReq_0().getData().getMidurlinfo().get(0).getPurl();
-                        mView.getContract().getSongUrl(url);
+                        if (songUrlBean.getReq_0().getData().getMidurlinfo().get(0).getPurl().equals("")) {
+                            mView.getContract().getSongUrlFail("没版权");
+                        }else {
+                            mView.getContract().getSongUrlFail("");
+                            mView.getContract().getSongUrl(url);
+                        }
+
                     }
 
                     @Override

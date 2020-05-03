@@ -9,6 +9,9 @@ import android.widget.TextView;
  */
 public class CommonUtil {
 
+    public static final int SongResultType=1;
+    public static final int AlbumResultType=2;
+
     /**
      * 使指定的字符串显示不同的颜色
      */
