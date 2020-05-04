@@ -1,5 +1,6 @@
 package com.example.mymusic.search.album;
 
+import com.example.mymusic.bean.AlbumInfoBean;
 import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 
@@ -13,14 +14,19 @@ public interface ISearchAlbum {
 
     interface V {
         void getResult(SearchAlbumBean searchAlbumBean);
+        void getAlbumInfo(AlbumInfoBean infoBean);
     }
 
 
     interface P {
         void SearchKey(String searchKey);
+
+        void getAlbumInfo(String albumId);
     }
 
     interface M {
         void getSearchAlbumResult(String search, Observer<SearchAlbumBean> observer);
+
+        void getAlbumInfo(String albumId, Observer<AlbumInfoBean> observer);
     }
 }

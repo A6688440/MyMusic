@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 
 import com.example.mymusic.R;
 import com.example.mymusic.adapter.SongResultRecycleViewAdapter;
+import com.example.mymusic.bean.AlbumInfoBean;
+import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.databinding.FragmentAlbumResultBinding;
 import com.example.mymusic.mvp.view.BaseFragment;
 import com.example.mymusic.bean.SearchSongBean;
+import com.example.mymusic.search.view_model.AlbumInfoViewModel;
 import com.example.mymusic.search.view_model.SearchViewModel;
 import com.example.mymusic.utils.CommonUtil;
 
@@ -33,6 +36,7 @@ public class AlbumResultFragment extends BaseFragment<SearchAlbumPresenter, ISea
     private SearchViewModel model;
     private SongResultRecycleViewAdapter adapter;
     private String searchKey;
+    private AlbumInfoViewModel infoViewModel;
 
     @Nullable
     @Override
@@ -58,15 +62,25 @@ public class AlbumResultFragment extends BaseFragment<SearchAlbumPresenter, ISea
 
     @Override
     public ISearchAlbum.V getContract() {
-        return searchAlbumBean -> {
-            adapter = new SongResultRecycleViewAdapter(searchAlbumBean.getData().getAlbum().getList(),
-                    searchKey, CommonUtil.AlbumResultType, getContext(), (albumId, rippleView) -> {
-                NavController controller= Navigation.findNavController(requireActivity(),R.id.fragment2);
+        return new ISearchAlbum.V() {
+            @Override
+            public void getResult(SearchAlbumBean searchAlbumBean) {
+                adapter = new SongResultRecycleViewAdapter(searchAlbumBean.getData().getAlbum().getList(),
+                        searchKey, CommonUtil.AlbumResultType, getContext(), (albumId, rippleView) -> {
+                    mPresenter.getContract().getAlbumInfo(albumId);
+                });
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                binding.albumResultRecycleView.setLayoutManager(layoutManager);
+                binding.albumResultRecycleView.setAdapter(adapter);
+            }
+
+            @Override
+            public void getAlbumInfo(AlbumInfoBean infoBean) {
+                infoViewModel = new ViewModelProvider(requireActivity()).get(AlbumInfoViewModel.class);
+                infoViewModel.addModel(infoBean.getData());
+                NavController controller = Navigation.findNavController(requireActivity(), R.id.fragment2);
                 controller.navigate(R.id.action_searchFragment_to_albumInfoFragment);
-            });
-            LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
-            binding.albumResultRecycleView.setLayoutManager(layoutManager);
-            binding.albumResultRecycleView.setAdapter(adapter);
+            }
         };
     }
 

@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/albumInfoFragment"
-        android:name="com.example.mymusic.search.album.AlbumInfoFragment"
+        android:name="com.example.mymusic.search.album.AlbumSongInfoFragment"
         android:label="fragment_album_info"
-        tools:layout="@layout/fragment_album_info" />
+        tools:layout="@layout/fragment_album_song_info" />
 </navigation>

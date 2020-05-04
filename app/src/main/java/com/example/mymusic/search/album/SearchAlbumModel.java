@@ -1,5 +1,6 @@
 package com.example.mymusic.search.album;
 
+import com.example.mymusic.bean.AlbumInfoBean;
 import com.example.mymusic.mvp.model.BaseModel;
 import com.example.mymusic.mvp.retrofit.ApiRetrofit;
 import com.example.mymusic.bean.SearchAlbumBean;
@@ -13,7 +14,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by SJC on 2020/4/25.
  * Describe：
  */
-public class SearchAlbumModel extends BaseModel<SearchAlbumPresenter,ISearchAlbum.M> {
+public class SearchAlbumModel extends BaseModel<SearchAlbumPresenter, ISearchAlbum.M> {
     public SearchAlbumModel(SearchAlbumPresenter mPresenter) {
         super(mPresenter);
     }
@@ -23,16 +24,30 @@ public class SearchAlbumModel extends BaseModel<SearchAlbumPresenter,ISearchAlbu
         return new ISearchAlbum.M() {
             @Override
             public void getSearchAlbumResult(String search, Observer<SearchAlbumBean> observer) {
-                    Observable<SearchAlbumBean> getAlbumResult = ApiRetrofit
-                            .getInstanceSearch()
-                            .getApiServiceSearch()
-                            .searchAlbum(search, 2);
+                Observable<SearchAlbumBean> getAlbumResult = ApiRetrofit
+                        .getInstanceSearch()
+                        .getApiServiceSearch()
+                        .searchAlbum(search, 2);
 
-                    getAlbumResult
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(observer);
+                getAlbumResult
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+            }
+
+            @Override
+            public void getAlbumInfo(String albumId, Observer<AlbumInfoBean> observer) {
+                Observable<AlbumInfoBean> getAlbumResult = ApiRetrofit
+                        .getInstanceSearch()
+                        .getApiServiceSearch()
+                        .getAlbumInfo(albumId);
+
+                getAlbumResult
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
             }
         };
+
     }
 }

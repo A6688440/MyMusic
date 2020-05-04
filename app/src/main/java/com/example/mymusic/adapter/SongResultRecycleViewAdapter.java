@@ -13,6 +13,7 @@ import com.andexert.library.RippleView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.mymusic.R;
+import com.example.mymusic.bean.AlbumInfoBean;
 import com.example.mymusic.bean.SearchAlbumBean;
 import com.example.mymusic.bean.SearchSongBean;
 import com.example.mymusic.utils.CommonUtil;
@@ -36,8 +37,9 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
 //    private final int albumType = 2;
 
     private List<SearchSongBean.DataBean.SongBean.ListBean> list;
-
     private List<SearchAlbumBean.DataBean.AlbumBean.ListBean> albumList;
+    private List<AlbumInfoBean.DataBean.ListBean> albumInfoList;
+
     private String searchKey;
     private String songId;
     private String albumId;
@@ -45,6 +47,15 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     private MyAlbumItemCallBack albumItemCallBack;
     private int mType;
     private Context context;
+
+
+    public SongResultRecycleViewAdapter(List<AlbumInfoBean.DataBean.ListBean> list, int mType, String songId, MySongItemCallBack callBack) {
+        this.albumInfoList = list;
+        this.songId = songId;
+        this.callBack = callBack;
+        this.mType = mType;
+
+    }
 
     public SongResultRecycleViewAdapter(List<SearchSongBean.DataBean.SongBean.ListBean> list, int mType, String searchKey, String songId, MySongItemCallBack callBack) {
         this.list = list;
@@ -80,11 +91,17 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
                     .inflate(R.layout.recycler_item_album_result, parent, false);
             AlbumHolder albumHolder = new AlbumHolder(view);
             return albumHolder;
+        }else if(viewType==CommonUtil.AlbumInfoType){
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.recycler_item_song_result, parent, false);
+            AlbumInfoHolder infoHolder = new AlbumInfoHolder(view);
+            return infoHolder;
         }
         return null;
     }
 
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof SongHolder) {
@@ -120,7 +137,8 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
                 songId = list.get(position).getSongmid();
             });
 
-        } else {
+        }
+        else if(viewHolder instanceof AlbumHolder){
             AlbumHolder albumHolder = (AlbumHolder) viewHolder;
             Glide.with(context).load(albumList.get(position).getAlbumPic())
                     .apply(RequestOptions.errorOf(R.drawable.background)).into(albumHolder.albumIv);
@@ -134,6 +152,38 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
                 albumItemCallBack.ItemOnClickListener(albumList.get(position).getAlbumMID(), rippleView);
             });
         }
+        else if(viewHolder instanceof AlbumInfoHolder){
+            AlbumInfoHolder holder = (AlbumInfoHolder) viewHolder;
+
+
+            StringBuilder singer = new StringBuilder(albumInfoList.get(position).getSinger().get(0).getName());
+            for (int i = 1; i < albumInfoList.get(position).getSinger().size(); i++) {
+                singer.append("、").append(albumInfoList.get(position).getSinger().get(i).getName());
+            }
+
+
+            if (albumInfoList.get(position).getSongmid().equals(songId)) {
+                holder.playLine.setVisibility(View.VISIBLE);
+                holder.mItemView.setBackgroundResource(R.color.translucent);
+            } else {
+                holder.playLine.setVisibility(View.INVISIBLE);
+                holder.mItemView.setBackgroundResource(R.color.transparent);
+            }
+
+            holder.mItemView.setOnClickListener(view -> {
+                List<String> stringList = new ArrayList<>();
+                for (SearchAlbumBean.DataBean.AlbumBean.ListBean.SingerListBean singerListBean : albumList.get(position).getSinger_list()) {
+                    stringList.add(singerListBean.getName());
+                }
+
+                callBack.ItemOnClickListener(list.get(position).getSongmid(),
+                        albumInfoList.get(position).getAlbummid(),
+                        albumInfoList.get(position).getSongname(),
+                        stringList,
+                        position);
+                songId = albumInfoList.get(position).getSongmid();
+            });
+        }
     }
 
 
@@ -143,6 +193,8 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
             return list.size();
         } else if (mType == CommonUtil.AlbumResultType) {
             return albumList.size();
+        }else if(mType==CommonUtil.AlbumInfoType){
+        return albumInfoList.size();
         }
         return 0;
     }
@@ -184,13 +236,19 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
         }
     }
 
-    //判断点击的是否为上一个点击的项目
-    private void equalPosition(int position) {
-        if (position != mLastPosition) {
-            if (mLastPosition != -1) notifyItemChanged(mLastPosition);
-            mLastPosition = position;
-        }
+    static class AlbumInfoHolder extends RecyclerView.ViewHolder {
 
+        TextView songTitle, songAuthor;
+        RippleView mItemView;
+        View playLine;
+
+        public AlbumInfoHolder(@NonNull View itemView) {
+            super(itemView);
+            songTitle = itemView.findViewById(R.id.item_song_title);
+            songAuthor = itemView.findViewById(R.id.item_song_author);
+            playLine = itemView.findViewById(R.id.line_play);
+            mItemView = itemView.findViewById(R.id.ripple_song_result);
+        }
     }
 
     public interface MySongItemCallBack {
