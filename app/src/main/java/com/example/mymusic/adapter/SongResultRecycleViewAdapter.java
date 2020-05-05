@@ -43,16 +43,18 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     private String searchKey;
     private String songId;
     private String albumId;
-    private MySongItemCallBack callBack;
-    private MyAlbumItemCallBack albumItemCallBack;
     private int mType;
     private Context context;
 
+    private MySongItemCallBack callBack;
+    private MyAlbumItemCallBack albumItemCallBack;
+    private MyAlbumSongCallBack albumSongCallBack;
 
-    public SongResultRecycleViewAdapter(List<AlbumInfoBean.DataBean.ListBean> list, int mType, String songId, MySongItemCallBack callBack) {
+
+    public SongResultRecycleViewAdapter(List<AlbumInfoBean.DataBean.ListBean> list, int mType, String songId, MyAlbumSongCallBack albumSongCallBack) {
         this.albumInfoList = list;
         this.songId = songId;
-        this.callBack = callBack;
+        this.albumSongCallBack = albumSongCallBack;
         this.mType = mType;
 
     }
@@ -76,7 +78,6 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -91,7 +92,7 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
                     .inflate(R.layout.recycler_item_album_result, parent, false);
             AlbumHolder albumHolder = new AlbumHolder(view);
             return albumHolder;
-        }else if(viewType==CommonUtil.AlbumInfoType){
+        } else if (viewType == CommonUtil.AlbumInfoType) {
             view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.recycler_item_song_result, parent, false);
             AlbumInfoHolder infoHolder = new AlbumInfoHolder(view);
@@ -106,7 +107,6 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof SongHolder) {
             SongHolder holder = (SongHolder) viewHolder;
-
             StringBuilder singer = new StringBuilder(list.get(position).getSinger().get(0).getName());
             for (int i = 1; i < list.get(position).getSinger().size(); i++) {
                 singer.append("、").append(list.get(position).getSinger().get(i).getName());
@@ -137,8 +137,7 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
                 songId = list.get(position).getSongmid();
             });
 
-        }
-        else if(viewHolder instanceof AlbumHolder){
+        } else if (viewHolder instanceof AlbumHolder) {
             AlbumHolder albumHolder = (AlbumHolder) viewHolder;
             Glide.with(context).load(albumList.get(position).getAlbumPic())
                     .apply(RequestOptions.errorOf(R.drawable.background)).into(albumHolder.albumIv);
@@ -151,16 +150,14 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
             albumHolder.item.setOnRippleCompleteListener(rippleView -> {
                 albumItemCallBack.ItemOnClickListener(albumList.get(position).getAlbumMID(), rippleView);
             });
-        }
-        else if(viewHolder instanceof AlbumInfoHolder){
+        } else if (viewHolder instanceof AlbumInfoHolder) {
             AlbumInfoHolder holder = (AlbumInfoHolder) viewHolder;
 
-
             StringBuilder singer = new StringBuilder(albumInfoList.get(position).getSinger().get(0).getName());
+
             for (int i = 1; i < albumInfoList.get(position).getSinger().size(); i++) {
                 singer.append("、").append(albumInfoList.get(position).getSinger().get(i).getName());
             }
-
 
             if (albumInfoList.get(position).getSongmid().equals(songId)) {
                 holder.playLine.setVisibility(View.VISIBLE);
@@ -171,18 +168,21 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
             }
 
             holder.mItemView.setOnClickListener(view -> {
-                List<String> stringList = new ArrayList<>();
-                for (SearchAlbumBean.DataBean.AlbumBean.ListBean.SingerListBean singerListBean : albumList.get(position).getSinger_list()) {
-                    stringList.add(singerListBean.getName());
+                List<String> albumStringList = new ArrayList<>();
+                for (AlbumInfoBean.DataBean.ListBean.SingerBean singerBean : albumInfoList.get(position).getSinger()) {
+                    albumStringList.add(singerBean.getName());
                 }
+                songId = albumInfoList.get(position).getSongmid();
 
-                callBack.ItemOnClickListener(list.get(position).getSongmid(),
+                albumSongCallBack.ItemOnClickListener(albumInfoList.get(position).getSongmid(),
                         albumInfoList.get(position).getAlbummid(),
                         albumInfoList.get(position).getSongname(),
-                        stringList,
+                        albumStringList,
                         position);
-                songId = albumInfoList.get(position).getSongmid();
             });
+
+            holder.songTitle.setText(albumInfoList.get(position).getSongname());
+            holder.songAuthor.setText(singer);
         }
     }
 
@@ -193,8 +193,8 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
             return list.size();
         } else if (mType == CommonUtil.AlbumResultType) {
             return albumList.size();
-        }else if(mType==CommonUtil.AlbumInfoType){
-        return albumInfoList.size();
+        } else if (mType == CommonUtil.AlbumInfoType) {
+            return albumInfoList.size();
         }
         return 0;
     }
@@ -257,5 +257,10 @@ public class SongResultRecycleViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     public interface MyAlbumItemCallBack {
         void ItemOnClickListener(String albumId, RippleView rippleView);
+    }
+
+
+    public interface MyAlbumSongCallBack {
+        void ItemOnClickListener(String songId, String albumId, String songName, List<String> singers, int position);
     }
 }

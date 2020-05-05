@@ -67,7 +67,9 @@ public class AlbumResultFragment extends BaseFragment<SearchAlbumPresenter, ISea
             public void getResult(SearchAlbumBean searchAlbumBean) {
                 adapter = new SongResultRecycleViewAdapter(searchAlbumBean.getData().getAlbum().getList(),
                         searchKey, CommonUtil.AlbumResultType, getContext(), (albumId, rippleView) -> {
+                    Log.e(TAG, "getResult: "+albumId);
                     mPresenter.getContract().getAlbumInfo(albumId);
+
                 });
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 binding.albumResultRecycleView.setLayoutManager(layoutManager);
@@ -76,6 +78,7 @@ public class AlbumResultFragment extends BaseFragment<SearchAlbumPresenter, ISea
 
             @Override
             public void getAlbumInfo(AlbumInfoBean infoBean) {
+                Log.e(TAG, "getAlbumInfo: "+infoBean.getData().getList().size() );
                 infoViewModel = new ViewModelProvider(requireActivity()).get(AlbumInfoViewModel.class);
                 infoViewModel.addModel(infoBean.getData());
                 NavController controller = Navigation.findNavController(requireActivity(), R.id.fragment2);

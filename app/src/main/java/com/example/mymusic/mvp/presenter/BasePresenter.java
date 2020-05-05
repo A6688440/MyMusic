@@ -25,7 +25,6 @@ public abstract class BasePresenter<V extends BaseView,M extends BaseModel,CONTR
         this.mModel = getModelInstance();
     }
 
-
     //绑定mView
     public void bingView(V mView) {
         this.mView = mView;
@@ -37,11 +36,5 @@ public abstract class BasePresenter<V extends BaseView,M extends BaseModel,CONTR
     public void unBindView() {
         mView = null;
     }
-
-
-
-
-
-
 
 }

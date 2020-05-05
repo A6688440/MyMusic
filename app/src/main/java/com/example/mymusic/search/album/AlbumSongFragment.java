@@ -110,8 +110,9 @@ public class AlbumSongFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         infoViewModel.getData().observe(requireActivity(), dataBean -> {
-            Log.e(TAG, "onViewCreated: "+dataBean.getList().size() );
-            adapter = new SongResultRecycleViewAdapter(dataBean.getList(), CommonUtil.AlbumInfoType, songId, (songmId, albumId, songName, singers, position) -> EventBus.getDefault().postSticky(new EventMessage(songmId, albumId, songName, singers)));
+            Log.e(TAG, "onViewCreated: "+dataBean.getList().size());
+            adapter = new SongResultRecycleViewAdapter(dataBean.getList(),
+                    CommonUtil.AlbumInfoType, songId, (songId, albumId, songName, singers, position) -> EventBus.getDefault().postSticky(new EventMessage(songId,albumId,songName,singers)));
             binding.albumSongRecycleView.addItemDecoration(new MaterialViewPagerHeaderDecorator());
             binding.albumSongRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
             binding.albumSongRecycleView.setAdapter(adapter);
